@@ -24,6 +24,9 @@ spring :
         ehcache :
         config : classpath:/conf/cache/ehcache-config.xml
 
+logging:
+  config: classpath:logback-spring.xml
+
 ---
 
 # Server Setting

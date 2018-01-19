@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="1 hours">
+
+    <!-- 콘솔 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%date %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <springProfile name="local">
+        <!-- 날짜별 & 사이즈별 파일 -->
+        <appender name="FILE_SIZE_DAILY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>./logs/osms.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- rollover daily -->
+                <fileNamePattern>./logs/osms-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <!-- or whenever the file size reaches 200MB -->
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%X{requestId} %d{yyyy:MM:dd HH:mm:ss.SSS} [%thread] %X{req.ip} %-5level %logger{36}[%line] - %msg%n</pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <springProfile name="dev, qa, prod">
+        <!-- 날짜별 & 사이즈별 파일 -->
+        <appender name="FILE_SIZE_DAILY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/osms/logs/osms.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- rollover daily -->
+                <fileNamePattern>/data/osms/logs/osms-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <!-- or whenever the file size reaches 200MB -->
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%X{requestId} %d{yyyy:MM:dd HH:mm:ss.SSS} [%thread] %X{req.ip} %-5level %logger{36}[%line] - %msg%n</pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <springProfile name="local">
+        <root level="ERROR">
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+
+    <springProfile name="dev, qa, prod">
+        <root level="DEBUG">
+            <appender-ref ref="FILE_SIZE_DAILY" />
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+
+</configuration>
