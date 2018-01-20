@@ -1,0 +1,16 @@
+1. 모니터링 종류
+ - OS : cpu, memory, hdd capacity, hdd partition
+ - 네트워크 : ip, port
+ - 등등
+
+2. 구현 화면 종류
+ - 웹 : 운영중 확인용
+ - 콘솔 : 설치 또는 웹으로 접속 불가시 확인용
+
+3. 기술
+ - spring boot
+ - console gui
+
+4. 기타
+ - 자동 설치 기능 여부
+ -
