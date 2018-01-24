@@ -1,7 +1,7 @@
 1. 모니터링 종류
- - OS : cpu, memory, hdd capacity, hdd partition
- - 네트워크 : ip, port
- - 등등
+ - OS 환경: cpu, memory, hdd capacity, hdd partition
+ - 네트워크 환경 : ip, port
+ - 솔루션 설정 정보
 
 2. 구현 화면 종류
  - 웹 : 운영중 확인용
@@ -9,8 +9,10 @@
 
 3. 기술
  - spring boot
- - console gui
+ - OS 환경 
+   1. https://github.com/david100gom/os-monitor 참고
+ - Network 환경
+ - 솔루션 설정
 
 4. 기타
  - 자동 설치 기능 여부
- -
