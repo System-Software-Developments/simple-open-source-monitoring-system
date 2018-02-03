@@ -1,0 +1,1 @@
+lsof -i -nP | grep LISTEN | awk '{print $(NF-1)" "$1}' | sort -u
