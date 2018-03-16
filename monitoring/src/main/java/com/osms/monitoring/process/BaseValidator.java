@@ -19,7 +19,6 @@ public class BaseValidator {
             // shell script must be located at local filesystem, shell script link info is parameter
             String returnString = ShellCommander.shellCmd("/Users/administrator/Downloads/network.sh");
             System.out.println("Network : "+returnString);
-
             SystemInfo.getInfo();
 
         } catch (Exception e) {
