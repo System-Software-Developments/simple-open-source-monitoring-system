@@ -16,6 +16,7 @@ public class BaseValidator {
         try {
 
             System.out.println("OS Type : "+ OSValidator.getOSType());
+            
             // shell script must be located at local filesystem, shell script link info is parameter
             String returnString = ShellCommander.shellCmd("/Users/administrator/Downloads/network.sh");
             System.out.println("Network : "+returnString);
