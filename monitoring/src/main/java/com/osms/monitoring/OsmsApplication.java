@@ -1,5 +1,6 @@
 package com.osms.monitoring;
 
+import com.osms.monitoring.monitor.os.OsMonitor;
 import com.osms.monitoring.process.BaseValidator;
 import com.osms.monitoring.util.OSValidator;
 import com.osms.monitoring.util.ShellCommander;
@@ -13,7 +14,11 @@ public class OsmsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OsmsApplication.class, args);
-		BaseValidator.start();
-
+		//BaseValidator.start();
+		try {
+			OsMonitor.runOsMonitor();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

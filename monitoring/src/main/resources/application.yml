@@ -67,6 +67,45 @@ spring:
             testWhileIdle : true
             timeBetweenEvictionRunsMillis : 1800000
 
+---
+# Server Setting
+server :
+    session :
+        timeout : 1800
+    tomcat :
+        uri-encoding : UTF-8
+    servlet-path : /*
+    port: 9009
+
+spring:
+    profiles: dev
+    first :
+        datasource:
+            url : jdbc:mysql://localhost:3306/BAMONS2?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            driver-class-name : com.mysql.jdbc.Driver
+            username : root
+            password : 1111
+            type : javax.sql.DataSource
+            maxActive : 50
+            maxIdle : 0
+            maxWait : -1
+            validationQuery : SELECT 1
+            testWhileIdle : true
+            timeBetweenEvictionRunsMillis : 1800000
+    second :
+        datasource:
+            url : jdbc:mysql://localhost:3306/BAMONS2?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            driver-class-name : com.mysql.jdbc.Driver
+            username : root
+            password : 1111
+            type : javax.sql.DataSource
+            maxActive : 50
+            maxIdle : 0
+            maxWait : -1
+            validationQuery : SELECT 1
+            testWhileIdle : true
+            timeBetweenEvictionRunsMillis : 1800000
+
 # Actuator 읽기 인증 제거
 management :
     security :
