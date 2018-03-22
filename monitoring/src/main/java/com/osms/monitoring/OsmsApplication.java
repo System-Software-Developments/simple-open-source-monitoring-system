@@ -12,13 +12,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class OsmsApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		SpringApplication.run(OsmsApplication.class, args);
 		//BaseValidator.start();
-		try {
-			OsMonitor.runOsMonitor();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		OsMonitor.runOsMonitor();
+
 	}
 }
