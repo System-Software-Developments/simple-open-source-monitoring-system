@@ -113,8 +113,7 @@ public class OsmsUtils {
                     return true;
                 }
             };
-            SSLSocketFactory sf =
-                    new SSLSocketFactory(acceptingTrustStrategy, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            SSLSocketFactory sf = new SSLSocketFactory(acceptingTrustStrategy, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             SchemeRegistry registry = new SchemeRegistry();
             registry.register(new Scheme("https", 443, sf));
             ClientConnectionManager ccm = new SingleClientConnManager(registry);

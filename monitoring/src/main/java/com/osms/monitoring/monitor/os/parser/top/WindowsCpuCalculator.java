@@ -28,7 +28,6 @@ public class WindowsCpuCalculator extends AbstractCpuCalculator {
     cores = Runtime.getRuntime().availableProcessors();
   }
 
-
   protected Map<Map<String, Object>, Double> doCalculate(Map<String, Map<String, Object>> values) {
     processes = clean(processes, values);
     
