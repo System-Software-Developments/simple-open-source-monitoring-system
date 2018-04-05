@@ -38,5 +38,5 @@ dependencies {
 	//compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile group: 'com.github.oshi', name: 'oshi-core', version: '3.4.4'
-	compile 'org.apache.httpcomponents:httpclient:4.3.6'
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'
 }

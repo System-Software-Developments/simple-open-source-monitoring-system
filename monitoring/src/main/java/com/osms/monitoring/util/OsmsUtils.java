@@ -5,29 +5,22 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.SSLContext;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.SingleClientConnManager;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,44 +94,52 @@ public class OsmsUtils {
         return sb.toString();
     }
 
-    public static DefaultHttpClient createHttpClient(String url) throws Exception {
-        return createHttpClient(url, null);
-    }
+    public static HttpClient createHttpClient(String url) throws Exception {
 
-    public static DefaultHttpClient createHttpClient(String url, HttpParams myParams) throws Exception {
-        DefaultHttpClient httpClient = null;
+        HttpClient httpClient = null;
+
+        int timeout = 1;
+        // ConnectionTimeout SocketTimeout 설정
+        RequestConfig config = RequestConfig.custom()
+                .setConnectTimeout(timeout * 1000)
+                .setConnectionRequestTimeout(timeout * 1000)
+                .setSocketTimeout(timeout * 1000).build();
+
         if(url.toLowerCase().startsWith("https")) {
+
             TrustStrategy acceptingTrustStrategy = new TrustStrategy() {
+                @Override
                 public boolean isTrusted(X509Certificate[] certificate, String authType) {
                     return true;
                 }
             };
-            SSLSocketFactory sf = new SSLSocketFactory(acceptingTrustStrategy, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            SchemeRegistry registry = new SchemeRegistry();
-            registry.register(new Scheme("https", 443, sf));
-            ClientConnectionManager ccm = new SingleClientConnManager(registry);
-            httpClient = new DefaultHttpClient(ccm, myParams);
+
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, acceptingTrustStrategy).build();
+            SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+
+            httpClient = HttpClients.custom().setSSLSocketFactory(csf).setDefaultRequestConfig(config).build();
+
         } else {
-            httpClient = new DefaultHttpClient(myParams);
+            httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
         }
 
         return httpClient;
+
     }
 
     public static Map<String, Object> request(String target, String data) throws Exception {
         return request(target, data, null, null, true);
     }
+
     public static Map<String, Object> request(String target, String data, String authorization, Map<String, Object> body, boolean check) throws Exception {
+
         HttpPost httpPost = null;
         HttpResponse response = null;
         HttpClient httpClient = null;
-        try {
-            httpClient = OsmsUtils.createHttpClient(target);
 
-            // FIXIT? http://mini.prever.io:3000/issues/2342
-            // TODO upgrade version to handle timeout.
-            HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 100 * 1000);
-            HttpConnectionParams.setSoTimeout(httpClient.getParams(), 100 * 1000);
+        try {
+
+            httpClient = OsmsUtils.createHttpClient(target);
 
             httpPost = new HttpPost(target);
             if(authorization != null) {
@@ -157,22 +158,13 @@ public class OsmsUtils {
                 httpPost.setEntity(input);
             }
 
-//      List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-//      nvps.add(new BasicNameValuePair("content-type", "application/json"));
-//      if(authorization != null) {
-//        nvps.add(new BasicNameValuePair("Authorization", authorization));
-//      }
-//
-//      httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-
             logger.info("Requesting.......");
             logger.info("URI: {}", httpPost.getURI().toString());
             response = httpClient.execute(httpPost);
 
             if (response.getStatusLine().getStatusCode() != 200) {
                 logger.error("HTTP error: {}", EntityUtils.toString(response.getEntity(), "UTF-8"));
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatusLine().getStatusCode());
+                throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
             }
 
             String profile = EntityUtils.toString(response.getEntity(), "UTF-8");

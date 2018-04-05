@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -57,7 +58,6 @@ public class WebMonitor {
             }
         });
 
-
         Iterator<Entry<Integer, Map<String, String>>> iterator = targets.entrySet().iterator();
         while (iterator.hasNext()) {
             Entry<Integer, Map<String, String>> next = iterator.next();
@@ -84,7 +84,7 @@ public class WebMonitor {
                             data.put(target.get("devicename"), milliTime);
                             logger.debug("Response time: {}", data.toString());
                             //pang.sendData(data);
-                            logger.debug("sendData : {}", data);
+                            logger.debug("send Data : {}", data);
 
                         } catch (Throwable e) {
                             logger.error("Monitor has an error", e);
@@ -97,14 +97,9 @@ public class WebMonitor {
                     }
                 }
 
-
                 private void getResponse(String targetUrl) throws Exception {
 
-                    HttpParams myParams = new BasicHttpParams();
-                    HttpConnectionParams.setSoTimeout(myParams, 10000);
-                    HttpConnectionParams.setConnectionTimeout(myParams, 10000); // Timeout
-
-                    DefaultHttpClient httpClient = OsmsUtils.createHttpClient(targetUrl);
+                    HttpClient httpClient = OsmsUtils.createHttpClient(targetUrl);
                     HttpGet get = new HttpGet(targetUrl);
                     HttpResponse response = httpClient.execute(get);
                     HttpEntity entity = response.getEntity();
