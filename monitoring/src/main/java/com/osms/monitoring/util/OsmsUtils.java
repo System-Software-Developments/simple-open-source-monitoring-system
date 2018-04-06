@@ -36,10 +36,12 @@ public class OsmsUtils {
     public static String getDevicename(String devicename, String...args) {
         if(args != null) {
             devicename = replaceTwoToOne(replaceSpecialCharacter(replace(devicename, args)));
+
         }
         String prefix = OsmsProperties.getPrefix();
         if (prefix != null && !prefix.isEmpty()) {
             devicename = prefix+OsmsProperties.getConcatenator()+devicename;
+            //logger.debug("prefix : {}, getConcatenator : {}, devicename : {}", prefix, OsmsProperties.getConcatenator(), devicename);
         }
         return devicename;
     }
@@ -100,6 +102,7 @@ public class OsmsUtils {
 
         int timeout = 1;
         // ConnectionTimeout SocketTimeout 설정
+        // http://www.baeldung.com/httpclient-timeout
         RequestConfig config = RequestConfig.custom()
                 .setConnectTimeout(timeout * 1000)
                 .setConnectionRequestTimeout(timeout * 1000)

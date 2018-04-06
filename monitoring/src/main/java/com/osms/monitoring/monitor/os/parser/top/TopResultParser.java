@@ -158,8 +158,7 @@ public class TopResultParser extends CommonResultParser {
     return result; 
   }
   
-  private void getDetail(Map<String, Object> data, Map<String, Object> detail, String name,
-      double cpu, Map map_process) {
+  private void getDetail(Map<String, Object> data, Map<String, Object> detail, String name, double cpu, Map map_process) {
     Map map_cpu = (Map) map_process.get("cpu");
     String devicename = OsmsUtils.getDevicename(name+OsmsProperties.getConcatenator()+"cpu");
     addDeviceMeta(devicename, cpu, (String) map_cpu.get("tag"), (String) map_cpu.get("desc"), null);    

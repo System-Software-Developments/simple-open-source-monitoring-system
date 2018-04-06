@@ -1,5 +1,7 @@
 package com.osms.monitoring;
 
+import com.osms.monitoring.monitor.db.DBMonitor;
+import com.osms.monitoring.monitor.os.DiskMonitor;
 import com.osms.monitoring.monitor.os.OsMonitor;
 import com.osms.monitoring.monitor.web.WebMonitor;
 import com.osms.monitoring.process.BaseValidator;
@@ -7,6 +9,7 @@ import com.osms.monitoring.util.OSValidator;
 import com.osms.monitoring.util.ShellCommander;
 import com.osms.monitoring.util.SystemInfo;
 
+import java.util.Dictionary;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -18,5 +21,7 @@ public class OsmsApplication {
 		//BaseValidator.start();
 		OsMonitor.runOsMonitor();
 		WebMonitor.runWebMonitor();
+		DBMonitor.runDBMonitor();
+		DiskMonitor.runDiskMonitor();
 	}
 }

@@ -88,8 +88,7 @@ public class OsMonitor {
   private static String name;
 
   private static void runCmds(final Map<String, Object> keyMap) {
-    final Map<String, String> cmdMap =
-        (Map<String, String>) keyMap.get(ConfigConstants.COMMAND_PREFIX);
+    final Map<String, String> cmdMap = (Map<String, String>) keyMap.get(ConfigConstants.COMMAND_PREFIX);
 
     if (cmdMap != null) {
       int size = cmdMap.size();
@@ -146,7 +145,7 @@ public class OsMonitor {
       logger.debug("result : {}", data);
 
       OsMonitorUtils.changeDataToNumber(data);
-      logger.info("send data : " + data);
+      logger.info("send Data OS : {}", data);
       
       if (!OsMonitor.test) {
         //pang.sendData(data);
@@ -162,7 +161,7 @@ public class OsMonitor {
 
     public Executor(CmdType cmdType, Map<String, Object> configMap, String command, String key) {
       OSType os = OsCheck.getOperatingSystemType();
-      String periodString = (String) configMap.get(ConfigConstants.period);
+      String periodString = (String) configMap.get(ConfigConstants.OSMS_PERIOD);
       if (periodString != null && !periodString.isEmpty()) {
         period = Integer.valueOf(periodString) * 1000;
       } else {

@@ -25,8 +25,6 @@ import org.apache.http.params.HttpParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 public class WebMonitor {
     private static final Logger logger = LoggerFactory.getLogger(WebMonitor.class);
     private static boolean running = true;
@@ -84,7 +82,7 @@ public class WebMonitor {
                             data.put(target.get("devicename"), milliTime);
                             logger.debug("Response time: {}", data.toString());
                             //pang.sendData(data);
-                            logger.debug("send Data : {}", data);
+                            logger.info("send Data Web : {}", data);
 
                         } catch (Throwable e) {
                             logger.error("Monitor has an error", e);

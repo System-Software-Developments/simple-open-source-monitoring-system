@@ -34,7 +34,7 @@ dependencies {
 	//compile('org.springframework.session:spring-session')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	//compile('org.springframework.boot:spring-boot-starter-web-services')
-	//runtime('mysql:mysql-connector-java')
+	runtime('mysql:mysql-connector-java')
 	//compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile group: 'com.github.oshi', name: 'oshi-core', version: '3.4.4'
