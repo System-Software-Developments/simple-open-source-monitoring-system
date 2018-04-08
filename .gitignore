@@ -15,3 +15,8 @@ out/
 *.iws
 *.iml
 *.ipr
+logs/osms.log
+monitoring/gradlew.bat
+monitoring/gradle/wrapper/gradle-wrapper.jar
+monitoring/gradle/wrapper/gradle-wrapper.properties
+gradle-wrapper.jar
