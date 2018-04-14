@@ -6,4 +6,8 @@ package pattern.state;
  * Github : https://github.com/david100gom
  */
 public interface State {
+
+    public void onButtonPushed(Light light);
+    public void offButtonPushed(Light light);
+
 }

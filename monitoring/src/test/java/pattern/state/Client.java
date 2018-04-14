@@ -6,4 +6,12 @@ package pattern.state;
  * Github : https://github.com/david100gom
  */
 public class Client {
+
+    public static void main(String[] args) {
+        Light light = new Light();
+
+        light.offButtonPushed();
+        light.onButtonPushed();
+        light.offButtonPushed();
+    }
 }
