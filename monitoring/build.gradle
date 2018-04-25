@@ -37,6 +37,15 @@ dependencies {
 	runtime('mysql:mysql-connector-java')
 	//compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile group: 'com.github.oshi', name: 'oshi-core', version: '3.4.4'
+
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'
+	compile group: 'com.github.oshi', name: 'oshi-core', version: '3.5.0'
+	compile group: 'com.github.oshi', name: 'oshi-json', version: '3.5.0'
+	//compile group: 'com.github.oshi', name: 'oshi-core-shaded', version: '3.5.0'
+	compile group: 'com.github.oshi', name: 'oshi-dist', version: '3.5.0', ext: 'pom'
+	compile group: 'com.github.oshi', name: 'oshi-parent', version: '3.5.0', ext: 'pom'
+
+
+
+
 }

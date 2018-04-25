@@ -46,35 +46,35 @@ public class DiskMonitor {
 
         threadPools.execute(new Runnable() {
             public void run() {
-                while (running) {
+            while (running) {
 
-                    String drive;                // 드라이브 명
-                    double size;                 // 드라이브의 최대 크기 = 용량
+                String drive;                       // 드라이브 명
+                double size;                        // 드라이브의 최대 크기 = 용량
 
-                    NumberFormat nf = NumberFormat.getInstance();
-                    nf.setMaximumFractionDigits(2);                                   // 소숫점 2자리까지만 보이게 변환
+                NumberFormat nf = NumberFormat.getInstance();
+                nf.setMaximumFractionDigits(2);     // 소숫점 2자리까지만 보이게 변환
 
-                    File[] roots = File.listRoots();
-                    Map<String, String> data = new HashMap<String, String>();
+                File[] roots = File.listRoots();
+                Map<String, String> data = new HashMap<String, String>();
 
-                    for (File root : roots) {
-                        drive = root.getAbsolutePath();
-                        size = root.getTotalSpace() / Math.pow(1024, 3);
+                for (File root : roots) {
+                    drive = root.getAbsolutePath();
+                    size = root.getTotalSpace() / Math.pow(1024, 3);
 
-                        if(size > 0) {
-                            long freeSpace = new File(drive).getFreeSpace();
-                            double freeSize = freeSpace/Math.pow(1024, 3);      // 사용 가능 용량 (GB)
-                            data.put(OsmsUtils.getDevicename("disk")+OsmsProperties.getConcatenator()+drive, nf.format(freeSize));
-                        }
-                    }
-
-                    logger.debug("send Data Disk : {}", data);
-
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(OsmsProperties.getPeriod());
-                    } catch (InterruptedException e) {
+                    if(size > 0) {
+                        long freeSpace = new File(drive).getFreeSpace();
+                        double freeSize = freeSpace/Math.pow(1024, 3);      // 사용 가능 용량 (GB)
+                        data.put(OsmsUtils.getDevicename("disk")+OsmsProperties.getConcatenator()+drive, nf.format(freeSize));
                     }
                 }
+
+                logger.info("send Data Disk : {}", data);
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(OsmsProperties.getPeriod());
+                } catch (InterruptedException e) {
+                }
+            }
             }
 
         });

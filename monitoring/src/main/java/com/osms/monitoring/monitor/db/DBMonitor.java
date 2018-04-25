@@ -139,7 +139,7 @@ public class DBMonitor {
                             }
                         }
                     }
-                    logger.info(values.toString());
+                    logger.debug(values.toString());
 
                     rs.close();
                     stmt.close();
