@@ -19,8 +19,7 @@ public enum SizeUnit {
                 return value/1024;
             }
         }
-    },
-    MB {
+    }, MB {
         @Override
         public double to(long value) {
             if(value == 0) {
