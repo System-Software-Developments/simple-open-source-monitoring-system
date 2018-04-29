@@ -6,4 +6,7 @@ package pattern.command;
  * Github : https://github.com/david100gom
  */
 public class Alarm {
+    public void start() {
+        System.out.println("Alarming...");
+    }
 }

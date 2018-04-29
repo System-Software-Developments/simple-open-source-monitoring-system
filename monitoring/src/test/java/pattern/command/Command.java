@@ -6,4 +6,6 @@ package pattern.command;
  * Github : https://github.com/david100gom
  */
 public interface Command {
+    public abstract void execute();
+
 }

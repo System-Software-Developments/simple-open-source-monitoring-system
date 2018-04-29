@@ -5,5 +5,17 @@ package pattern.command;
  *
  * Github : https://github.com/david100gom
  */
-public class LampOnCommand {
+public class LampOnCommand implements Command{
+
+    private Lamp lamp;
+
+    public LampOnCommand(Lamp lamp) {
+        this.lamp = lamp;
+    }
+
+    @Override
+    public void execute() {
+        lamp.turnOn();
+    }
+
 }

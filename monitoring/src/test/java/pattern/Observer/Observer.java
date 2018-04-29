@@ -6,4 +6,5 @@ package pattern.Observer;
  * Github : https://github.com/david100gom
  */
 public interface Observer {
+    public abstract void update();
 }
