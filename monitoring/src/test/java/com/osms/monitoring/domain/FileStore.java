@@ -11,16 +11,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "usableSpace",
         "totalSpace"
 })
-public class FileStores {
+public class FileStore {
 
     @JsonProperty("name")
     private String name;
     @JsonProperty("volume")
     private String volume;
     @JsonProperty("usableSpace")
-    private Integer usableSpace;
+    private Long usableSpace;
     @JsonProperty("totalSpace")
-    private Integer totalSpace;
+    private Long totalSpace;
 
     @JsonProperty("name")
     public String getName() {
@@ -43,22 +43,22 @@ public class FileStores {
     }
 
     @JsonProperty("usableSpace")
-    public Integer getUsableSpace() {
+    public Long getUsableSpace() {
         return usableSpace;
     }
 
     @JsonProperty("usableSpace")
-    public void setUsableSpace(Integer usableSpace) {
+    public void setUsableSpace(Long usableSpace) {
         this.usableSpace = usableSpace;
     }
 
     @JsonProperty("totalSpace")
-    public Integer getTotalSpace() {
+    public Long getTotalSpace() {
         return totalSpace;
     }
 
     @JsonProperty("totalSpace")
-    public void setTotalSpace(Integer totalSpace) {
+    public void setTotalSpace(Long totalSpace) {
         this.totalSpace = totalSpace;
     }
 

@@ -1,9 +1,9 @@
-package com.osms.monitoring.domain;
+package com.osms.monitoring.monitor.os2.domain;
 
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -14,6 +14,7 @@ public class Processor {
 
     @JsonProperty("processorID")
     private String processorID;
+
     @JsonProperty("processorCpuLoadBetweenTicks")
     private List<Float> processorCpuLoadBetweenTicks = null;
 
@@ -42,5 +43,3 @@ public class Processor {
         return "ClassPojo [processorCpuLoadBetweenTicks = "+processorCpuLoadBetweenTicks+", processorID = "+processorID+"]";
     }
 }
-
-

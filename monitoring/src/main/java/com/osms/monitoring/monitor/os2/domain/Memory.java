@@ -1,4 +1,4 @@
-package com.osms.monitoring.domain;
+package com.osms.monitoring.monitor.os2.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
