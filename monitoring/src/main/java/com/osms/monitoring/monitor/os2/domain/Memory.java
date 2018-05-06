@@ -15,10 +15,13 @@ public class Memory {
 
     @JsonProperty("available")
     private Long available;
+
     @JsonProperty("total")
     private Long total;
+
     @JsonProperty("swapTotal")
     private Long swapTotal;
+
     @JsonProperty("swapUsed")
     private Long swapUsed;
 

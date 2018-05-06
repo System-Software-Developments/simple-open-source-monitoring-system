@@ -1,6 +1,7 @@
 package com.osms.monitoring;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.osms.monitoring.monitor.db.DBMonitor;
 import com.osms.monitoring.monitor.os2.SystemMonitor;
 import com.osms.monitoring.monitor.os2.domain.FileStore;
 import com.osms.monitoring.monitor.os2.domain.SolutionSystem;
@@ -39,6 +40,7 @@ public class OsmsApplication {
 
 		SpringApplication.run(OsmsApplication.class, args);
 		SystemMonitor.runSystemMonitor();
+		DBMonitor.runDBMonitor();
 
 	}
 

@@ -64,16 +64,22 @@ public class SystemMonitor {
 
                         for (FileStore key : list){
                             logger.info("disk name : {}", key.getName());
-                            logger.info("disk usableSpace : {}",SizeUnit.GB.to2(key.getUsableSpace())+"GB");
-                            logger.info("disk totalSpace : {}", SizeUnit.GB.to2(key.getTotalSpace())+"GB");
+                            logger.info("disk usableSpace : {}GB",SizeUnit.GB.to2(key.getUsableSpace()));
+                            logger.info("disk totalSpace : {}GB", SizeUnit.GB.to2(key.getTotalSpace()));
                         }
 
-                        List<Float> cpuList = result.getHardware().getProcessor().getProcessorCpuLoadBetweenTicks();
-                        int i = 1;
-                        for (Float key : cpuList){
-                            logger.info("{} cpu % : {}%", i++, key*100);
+
+                        long totalMemory = result.getHardware().getMemory().getTotal();
+                        long available = result.getHardware().getMemory().getAvailable();
+                        logger.info("Memory : total : {}GB, available : {}GB", SizeUnit.GB.to2(totalMemory), SizeUnit.GB.to2(available));
+
+
+                        //List<Float> cpuList = result.getHardware().getProcessor().getProcessorCpuLoadBetweenTicks();
+                        //int i = 1;
+                        //for (Float key : cpuList){
+                        //    logger.info("{} cpu % : {}%", i++, key*100);
                             //logger.info("{} CPU % : {}%", i++, Math.round(key*100*100)/100.0);
-                        }
+                        //}
 
                         HardwareAbstractionLayer hal = si.getHardware();
                         CentralProcessor processor = hal.getProcessor();
@@ -93,7 +99,11 @@ public class SystemMonitor {
                         long steal = ticks[TickType.STEAL.getIndex()] - prevTicks[TickType.STEAL.getIndex()];
                         long totalCpu = user + nice + sys + idle + iowait + irq + softirq + steal;
 
-                        logger.info("cpu : {}%", ((double)(totalCpu - (idle+iowait))/(double)totalCpu)*100);
+                        double cpu = ((double)(totalCpu - (idle+iowait))/(double)totalCpu)*100;
+                        logger.info("cpu : {}%", cpu);
+                        // 소수점 2째자리에서 반올림
+                        logger.info("cpu : {}%", Math.round(cpu*100)/100.0);
+
 
                     } catch (IOException e) {
                         e.printStackTrace();
