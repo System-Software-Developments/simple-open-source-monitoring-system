@@ -5,6 +5,7 @@ import com.osms.monitoring.monitor.os.DiskMonitor;
 import com.osms.monitoring.monitor.os2.domain.FileStore;
 import com.osms.monitoring.monitor.os2.domain.SolutionSystem;
 import com.osms.monitoring.util.OsmsProperties;
+import com.osms.monitoring.util.ShellCommander;
 import com.osms.monitoring.util.SizeUnit;
 import java.io.IOException;
 import java.util.Arrays;
@@ -100,13 +101,16 @@ public class SystemMonitor {
                         long totalCpu = user + nice + sys + idle + iowait + irq + softirq + steal;
 
                         double cpu = ((double)(totalCpu - (idle+iowait))/(double)totalCpu)*100;
-                        logger.info("cpu : {}%", cpu);
+                        logger.info("cpu1 : {}%", cpu);
                         // 소수점 2째자리에서 반올림
                         logger.info("cpu : {}%", Math.round(cpu*100)/100.0);
 
+                        logger.info("cpu2 : {}", ShellCommander.shellCmd("/data/osms/conf/sys-cpu.sh"));
 
-                    } catch (IOException e) {
+                    } catch (Exception e) {
+                        logger.error("Exception : {}", e);
                         e.printStackTrace();
+
                     }
 
                     try {

@@ -23,3 +23,8 @@
   1. OS 기본정보 - SystemInfo 로 확인 - done
   2. 오픈되어 있는 네트워크 포트 확인 - network.sh 스크립트 추가 - done
   3. 아파치, 톰캣, mysql, redis, node 구동여부 - 셀스크립트 추가
+
+
+5/8 - CPU 쿼리 추가
+TODO redis 상태추가
+TODO rtls + api + wms 상태추가
