@@ -31,10 +31,7 @@ public class WebMonitor {
     private static int TIMEOUT_VALUE = 5000;
     private static String tname = null;
 
-    //public static void main(String[] args) throws Exception {
     public static void runWebMonitor() throws Exception {
-        // Pang must be initialized first to use pang.properties by PangProperties
-        //final Pang pang = new PangMqtt();
 
         Map<Integer, Map<String, String>> targets = extractTargets();
 

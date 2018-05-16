@@ -22,9 +22,6 @@ public class DBMonitor {
 
     private static final Logger logger = LoggerFactory.getLogger(DBMonitor.class);
 
-    // pang-a-01.status.queries_per_second
-    // pang-a-01.jdbc.username=pangdata
-    //pang-a-01.status.queries_per_second
     private static final String TRAFFIC_OUT = "traffic_out";
     private static final String TRAFFIC_IN = "traffic_in";
     private static final String QUERIES_PER_SECOND = "queries_per_second";
@@ -54,10 +51,7 @@ public class DBMonitor {
     private static Connection conn = null;
     private static Statement stmt = null;
 
-    //public static void main(String[] args) throws Exception {
     public static void runDBMonitor() throws Exception {
-        // Prever must be initialized first to use prever.properties by PangProperties
-        // final Pang prever = new PangMqtt();
 
         JDBC_DRIVER = (String) OsmsProperties.getProperty("jdbc.driverClassName");
         DB_URL = (String) OsmsProperties.getProperty("jdbc.url");
@@ -104,17 +98,25 @@ public class DBMonitor {
                         String field = rs.getString(1).toLowerCase();
                         String value = rs.getString(2);
 
+
                         if (queries_per_second && field.equals("queries")) {
+                            // The number of statements executed by the server.
                             getQueriesPerSecond(queries_per_second, rtime, values, field, value);
                         } else if (traffic_in && field.equals("bytes_received")) {
+                            // The number of bytes received from all clients. (kb)
                             getTrafficIn(traffic_in, rtime, values, field, value);
                         } else if (traffic_out && field.equals("bytes_sent")) {
+                            // The number of bytes sent to all clients. (kb)
                             getTrafficOut(rtime, values, field, value);
                         } else if (writes_per_second && field.equals("innodb_data_writes")) {
+                            // The total number of data writes.
                             getWritesPerSecond(rtime, values, field, value);
                         } else if (reads_per_second && field.equals("innodb_data_reads")) {
+                            // The total number of data reads (OS file reads).
                             getReadsPerSecond(rtime, values, field, value);
                         } else if (buffer_usage && (field.equals("innodb_buffer_pool_pages_data") || field.equals("innodb_buffer_pool_pages_total"))) {
+                            // innodb_buffer_pool_pages_data : The number of pages in the InnoDB buffer pool containing data.
+                            // innodb_buffer_pool_pages_total : The total size of the InnoDB buffer pool, in pages.
                             getBufferUsage(field, value);
                             if (total_page > -1 && data_page > -1) {
                                 values.put(BUFFER_USAGE, rountTo2decimal(data_page * 100.0 / total_page));
