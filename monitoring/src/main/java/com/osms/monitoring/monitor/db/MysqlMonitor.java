@@ -18,9 +18,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
 
-public class DBMonitor {
+public class MysqlMonitor {
 
-    private static final Logger logger = LoggerFactory.getLogger(DBMonitor.class);
+    private static final Logger logger = LoggerFactory.getLogger(MysqlMonitor.class);
 
     private static final String TRAFFIC_OUT = "traffic_out";
     private static final String TRAFFIC_IN = "traffic_in";
@@ -53,10 +53,10 @@ public class DBMonitor {
 
     public static void runDBMonitor() throws Exception {
 
-        JDBC_DRIVER = (String) OsmsProperties.getProperty("jdbc.driverClassName");
-        DB_URL = (String) OsmsProperties.getProperty("jdbc.url");
-        USER = (String) OsmsProperties.getProperty("jdbc.username");
-        PASS = (String) OsmsProperties.getProperty("jdbc.password");
+        JDBC_DRIVER = (String) OsmsProperties.getProperty("mysql.jdbc.driverClassName");
+        DB_URL = (String) OsmsProperties.getProperty("mysql.jdbc.url");
+        USER = (String) OsmsProperties.getProperty("mysql.jdbc.username");
+        PASS = (String) OsmsProperties.getProperty("mysql.jdbc.password");
         PREFIX = (String) OsmsProperties.getProperty("osms.prefix");
 
         if(PREFIX == null || PREFIX.trim().isEmpty()) {
@@ -200,6 +200,7 @@ public class DBMonitor {
         time = 0;
     }
 
+    // Mysql
     private static Map<String, String> extractFields() {
         Properties properties = OsmsProperties.getProperties();
         Set<Entry<Object, Object>> entrySet = properties.entrySet();
@@ -210,7 +211,7 @@ public class DBMonitor {
         while (iterator.hasNext()) {
             Entry<Object, Object> next = iterator.next();
             String key = (String) next.getKey();
-            if (key.startsWith("status.")) {
+            if (key.startsWith("mysql.status.")) {
                 String field = key.substring(key.indexOf(".") + 1);
 
                 String value = (String) next.getValue();

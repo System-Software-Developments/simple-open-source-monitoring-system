@@ -66,6 +66,10 @@ spring:
             validationQuery : SELECT 1
             testWhileIdle : true
             timeBetweenEvictionRunsMillis : 1800000
+    redis:
+        host: 127.0.0.1
+        port: 6379
+        password: vldpsxl1q2w3e
 
 ---
 # Server Setting
@@ -105,6 +109,11 @@ spring:
             validationQuery : SELECT 1
             testWhileIdle : true
             timeBetweenEvictionRunsMillis : 1800000
+    redis:
+        host: 127.0.0.1
+        port: 6379
+        password: vldpsxl1q2w3e
+
 
 # Actuator 읽기 인증 제거
 management :
