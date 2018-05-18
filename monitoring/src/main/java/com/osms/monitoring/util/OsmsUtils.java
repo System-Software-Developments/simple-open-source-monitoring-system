@@ -30,7 +30,7 @@ public class OsmsUtils {
     private static final Logger logger = LoggerFactory.getLogger(OsmsUtils.class);
 
     public static String getDevicename(String devicename) {
-        return getDevicename(devicename, null);
+        return getDevicename(devicename);
     }
 
     public static String getDevicename(String devicename, String...args) {

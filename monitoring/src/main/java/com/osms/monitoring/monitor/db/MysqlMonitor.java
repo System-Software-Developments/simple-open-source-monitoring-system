@@ -211,7 +211,7 @@ public class MysqlMonitor {
         while (iterator.hasNext()) {
             Entry<Object, Object> next = iterator.next();
             String key = (String) next.getKey();
-            if (key.startsWith("mysql.status.")) {
+            if (key.startsWith("status.")) {
                 String field = key.substring(key.indexOf(".") + 1);
 
                 String value = (String) next.getValue();
