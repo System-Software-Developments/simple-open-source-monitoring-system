@@ -17,7 +17,7 @@ public class OsmsApplication {
 	public static void main(String[] args) throws Exception{
 		SpringApplication.run(OsmsApplication.class, args);
 		SystemMonitor.runSystemMonitor();
-		MysqlMonitor.runDBMonitor();
+		//MysqlMonitor.runDBMonitor();
         RedisMonitor.runDBMonitor();
     }
 

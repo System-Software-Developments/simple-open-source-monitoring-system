@@ -50,8 +50,9 @@ public class RedisMonitor {
 
             try {
 
-                String value = (String)jedis.info();
-                System.out.println("===>"+value);
+                String value = (String)jedis.info("Clients");
+                //System.out.println("===>"+value);
+                logger.info("Client Value : {}", value);
 
             } catch (Throwable e) {
                 logger.error("Redis monitor has an error", e);

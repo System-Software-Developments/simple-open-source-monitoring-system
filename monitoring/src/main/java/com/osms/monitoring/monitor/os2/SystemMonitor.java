@@ -2,6 +2,8 @@ package com.osms.monitoring.monitor.os2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.osms.monitoring.monitor.os.DiskMonitor;
+import com.osms.monitoring.monitor.os.util.OsCheck;
+import com.osms.monitoring.monitor.os.util.OsCheck.OSType;
 import com.osms.monitoring.monitor.os2.domain.FileStore;
 import com.osms.monitoring.monitor.os2.domain.SolutionSystem;
 import com.osms.monitoring.util.OsmsProperties;
@@ -64,15 +66,23 @@ public class SystemMonitor {
                         List<FileStore> list = result.getOperatingSystem().getFileSystem().getFileStores();
 
                         for (FileStore key : list){
-                            logger.info("disk name : {}", key.getName());
-                            logger.info("disk usableSpace : {}GB",SizeUnit.GB.to2(key.getUsableSpace()));
-                            logger.info("disk totalSpace : {}GB", SizeUnit.GB.to2(key.getTotalSpace()));
-                        }
 
+                            long totalSpace = key.getTotalSpace();
+                            if(SizeUnit.GB.to2(totalSpace) > 0) {
+                                long usableSpace = key.getUsableSpace();
+                                double usablePercent = ((double)usableSpace/(double)totalSpace)*100;
+
+                                logger.info("Disk Name : {}, Usable Percent : {}%, Total Space : {}GB, Usable Space : {}GB", key.getName(),  Math.round(usablePercent*100)/100.0, SizeUnit.GB.to2(totalSpace), SizeUnit.GB.to2(usableSpace));
+                            }
+                        }
 
                         long totalMemory = result.getHardware().getMemory().getTotal();
                         long available = result.getHardware().getMemory().getAvailable();
-                        logger.info("Memory : total : {}GB, available : {}GB", SizeUnit.GB.to2(totalMemory), SizeUnit.GB.to2(available));
+                        long useMemory = totalMemory-available;
+                        double availablePercent = ((double)available/(double)totalMemory)*100;
+                        double usePercent = ((double)useMemory/(double)totalMemory)*100;
+
+                        logger.info("Memory Total Size : {}GB, Available Size : {}GB, Available Percent : {}%, Usage Percent : {}%", SizeUnit.GB.to2(totalMemory), SizeUnit.GB.to2(available), Math.round(availablePercent*100)/100.0, Math.round(usePercent*100)/100.0);
 
 
                         //List<Float> cpuList = result.getHardware().getProcessor().getProcessorCpuLoadBetweenTicks();
@@ -101,11 +111,18 @@ public class SystemMonitor {
                         long totalCpu = user + nice + sys + idle + iowait + irq + softirq + steal;
 
                         double cpu = ((double)(totalCpu - (idle+iowait))/(double)totalCpu)*100;
-                        logger.info("cpu1 : {}%", cpu);
-                        // 소수점 2째자리에서 반올림
-                        logger.info("cpu : {}%", Math.round(cpu*100)/100.0);
+                        //logger.info("cpu1 : {}%", cpu);
 
-                        logger.info("cpu2 : {}", ShellCommander.shellCmd("/data/osms/conf/sys-cpu.sh"));
+                        OSType osType = OsCheck.getOperatingSystemType();
+
+                        if(OSType.Linux == osType || OSType.MacOS == osType) {
+                            // 소수점 2째자리에서 반올림
+                            logger.info("CPU by oshi : {}%, CPU by Linux top: {}", Math.round(cpu*100)/100.0,  ShellCommander.shellCmd("/data/osms/conf/sys-cpu.sh"));
+                        }else{
+                            // 소수점 2째자리에서 반올림
+                            logger.info("CPU Usage oshi : {}%", Math.round(cpu*100)/100.0);
+                        }
+
 
                     } catch (Exception e) {
                         logger.error("Exception : {}", e);
