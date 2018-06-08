@@ -5,6 +5,7 @@ import com.osms.monitoring.monitor.os.DiskMonitor;
 import com.osms.monitoring.monitor.os.util.OsCheck;
 import com.osms.monitoring.monitor.os.util.OsCheck.OSType;
 import com.osms.monitoring.monitor.os2.domain.FileStore;
+import com.osms.monitoring.monitor.os2.domain.Process;
 import com.osms.monitoring.monitor.os2.domain.SolutionSystem;
 import com.osms.monitoring.util.OsmsProperties;
 import com.osms.monitoring.util.ShellCommander;
@@ -19,12 +20,18 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import oshi.PlatformEnum;
 import oshi.hardware.CentralProcessor.TickType;
+import oshi.hardware.GlobalMemory;
 import oshi.json.SystemInfo;
 import oshi.json.hardware.CentralProcessor;
 import oshi.json.hardware.HardwareAbstractionLayer;
 import oshi.json.software.os.OperatingSystem;
 import oshi.json.util.PropertiesUtil;
+import oshi.software.os.NetworkParams;
+import oshi.json.software.os.OSProcess;
+import oshi.software.os.OperatingSystem.ProcessSort;
+import oshi.util.FormatUtil;
 import oshi.util.Util;
 
 public class SystemMonitor {
@@ -61,7 +68,7 @@ public class SystemMonitor {
                         ObjectMapper mapper = new ObjectMapper();
                         SolutionSystem result = mapper.readValue(si.toPrettyJSON(props), SolutionSystem.class);
 
-                        System.out.println(result.getHardware().getProcessor().getProcessorID());
+                        //System.out.println(result.getHardware().getProcessor().getProcessorID());
 
                         List<FileStore> list = result.getOperatingSystem().getFileSystem().getFileStores();
 
@@ -95,6 +102,7 @@ public class SystemMonitor {
                         HardwareAbstractionLayer hal = si.getHardware();
                         CentralProcessor processor = hal.getProcessor();
 
+
                         long[] prevTicks = processor.getSystemCpuLoadTicks();
                         // Wait a second...
                         Util.sleep(1000);
@@ -113,9 +121,10 @@ public class SystemMonitor {
                         double cpu = ((double)(totalCpu - (idle+iowait))/(double)totalCpu)*100;
                         //logger.info("cpu1 : {}%", cpu);
 
-                        OSType osType = OsCheck.getOperatingSystemType();
+                        //  Platform 구분
+                        PlatformEnum platformEnum = oshi.SystemInfo.getCurrentPlatformEnum();
 
-                        if(OSType.Linux == osType || OSType.MacOS == osType) {
+                        if(PlatformEnum.LINUX == platformEnum || PlatformEnum.MACOSX == platformEnum) {
                             // 소수점 2째자리에서 반올림
                             logger.info("CPU by oshi : {}%, CPU by Linux top: {}", Math.round(cpu*100)/100.0,  ShellCommander.shellCmd("/data/osms/conf/sys-cpu.sh"));
                         }else{
@@ -123,6 +132,35 @@ public class SystemMonitor {
                             logger.info("CPU Usage oshi : {}%", Math.round(cpu*100)/100.0);
                         }
 
+                        // TODO Network 정보
+                        OperatingSystem os = si.getOperatingSystem();
+                        String hostNmae = os.getNetworkParams().getHostName();
+                        String domainName = os.getNetworkParams().getDomainName();
+                        String dnsServer = Arrays.toString(os.getNetworkParams().getDnsServers());
+                        String ipv4DefaultGateway = os.getNetworkParams().getIpv4DefaultGateway();
+                        String ipv6DefaultGateway = os.getNetworkParams().getIpv6DefaultGateway();
+                        logger.info("Host name : {}, Domain name : {}, DNS servers : {}, IPv4 Gateway : {}, IPv6 Gateway : {}",hostNmae, domainName, dnsServer, ipv4DefaultGateway, ipv6DefaultGateway);
+
+                        // TODO os 종류 및 버전
+                        String osVersin = result.getOperatingSystem().getVersion().getVersion();
+                        String osCodeName = result.getOperatingSystem().getVersion().getCodeName();
+                        String osBuild = result.getOperatingSystem().getVersion().getBuild();
+                        String platform = result.getPlatform();
+                        String manufacturer = result.getOperatingSystem().getManufacturer();
+                        String family = result.getOperatingSystem().getFamily();
+                        logger.info("OS : {} {} {} {} {}", manufacturer, family, osVersin, osCodeName, osBuild);
+
+                        // TODO 프로세스 개수는 oshi.json.properties 설정
+                        // VSZ : virtual memory size (프로세스의 가상메모리 크기)
+                        // RSS : resident set size (프로세스가 사용하고 있는 물리적 메모리 크기)
+                        List<Process> processList = result.getOperatingSystem().getProcesses();
+                        // logger.info("   PID  %CPU %MEM       VSZ       RSS Name");
+                        int i=1;
+                        for (Process key : processList){
+                            logger.info("No : {}, PID : {}, %CPU : {}, %MEM : {}, VSZ : {}, RSS : {}, Name : {}", i++, key.getProcessID(), 100d * (key.getKernelTime() + key.getUserTime()) / key.getUpTime(),
+                                    100d * key.getResidentSetSize() / totalMemory, FormatUtil.formatBytes(key.getVirtualSize()),
+                                    FormatUtil.formatBytes(key.getResidentSetSize()), key.getName());
+                        }
 
                     } catch (Exception e) {
                         logger.error("Exception : {}", e);

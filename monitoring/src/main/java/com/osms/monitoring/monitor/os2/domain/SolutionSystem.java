@@ -6,15 +6,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+        "platform",
         "operatingSystem",
         "hardware"
 })
 public class SolutionSystem {
 
+    @JsonProperty("platform")
+    private String platform;
     @JsonProperty("operatingSystem")
     private OperatingSystem operatingSystem;
     @JsonProperty("hardware")
     private Hardware hardware;
+
+    @JsonProperty("platform")
+    public String getPlatform() {
+        return platform;
+    }
+
+    @JsonProperty("platform")
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
 
     @JsonProperty("operatingSystem")
     public OperatingSystem getOperatingSystem() {
@@ -34,11 +47,6 @@ public class SolutionSystem {
     @JsonProperty("hardware")
     public void setHardware(Hardware hardware) {
         this.hardware = hardware;
-    }
-
-    @Override
-    public String toString()  {
-        return "ClassPojo [operatingSystem = "+operatingSystem+", hardware = "+hardware+"]";
     }
 
 }
