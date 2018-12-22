@@ -1,4 +1,4 @@
-package pattern.Observer;
+package pattern.observer;
 
 /**
  * Created by david100gom on 2018. 4. 22.

@@ -1,4 +1,4 @@
-package pattern.Observer;
+package pattern.observer;
 
 
 import java.util.List;
