@@ -1,0 +1,5 @@
+#
+#Tue Jan 01 19:13:46 KST 2019
+Hiroshi\ Yuki=hyuki@example.com
+Tomura=tomura@example.com
+Hanako\ Sato=hanako@example.com
